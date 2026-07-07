@@ -4,9 +4,31 @@ on:
   push:
     branches: [main]
 
+permissions:
+  id-token: write   # Required so the workflow is allowed to request an OIDC token
+  contents: read
+
 jobs:
-  hello:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "Workflow is running!" 
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::471112677231:role/github-actions-deploy-role
+          aws-region: us-east-1
+
+      - name: Verify identity
+        run: aws sts get-caller-identity
+
+      - name: Deploy to S3
+        run: aws s3 sync ./dist s3://helena-astro-site --delete
