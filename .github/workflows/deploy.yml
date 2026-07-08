@@ -3,7 +3,7 @@ name: Deploy to S3
 on:
   push:
     branches: 
-      -'**'
+      - '**'
 
 permissions:
   id-token: write   # Required so the workflow is allowed to request an OIDC token
