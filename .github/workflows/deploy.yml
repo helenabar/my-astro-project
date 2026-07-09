@@ -25,11 +25,11 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::339712982725:role/github-actions-deploy-role
+          role-to-assume: arn:aws:iam::471112794818:role/github-actions-deploy-role
           aws-region: us-east-1
 
       - name: Verify identity
         run: aws sts get-caller-identity
 
       - name: Deploy to S3
-        run: aws s3 sync ./dist s3://helen-astro-site --delete
+        run: aws s3 sync ./dist s3://hel-astro-site --delete
